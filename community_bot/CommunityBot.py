@@ -69,7 +69,7 @@ async def main():
     logger.addHandler(file_handler)
     bot_logger.addHandler(file_handler)
     logger.addHandler(console_handler)
-    logger.addHandler(console_handler)
+    bot_logger.addHandler(console_handler)
     bot_logger.info('CommunityBot starting up')
     
     
