@@ -1,0 +1,13 @@
+NAME: "Community Bot"
+PREFIX: "!"
+TOKEN: ""
+LOG:
+  LEVEL: "INFO"
+  FILE: "community-bot.log"
+
+API:
+  HOST: "127.0.0.1:8000"
+  TOKEN: ""
+
+LANGUAGE: "EN"
+MODULES: "general"
