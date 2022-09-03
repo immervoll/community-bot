@@ -10,6 +10,7 @@ from community_bot.common.settings import Settings
 
 import discord
 from discord.ext import commands
+from discord import app_commands
 from aiohttp import ClientSession
 
 
@@ -24,19 +25,28 @@ class CommunityBot(commands.Bot):
         super().__init__(*args, **kwargs)
         self.initial_extensions = initial_extensions
         self.logger = logger
+        
 
     async def setup_hook(self) -> None:
 
         for extension in self.initial_extensions:
             await self.load_extension(f"community_bot.modules.{extension}")
+            self.logger.info(f"Loaded extension {extension}")
+    
+        
+        
 
         # This would also be a good place to connect to our database and
         # load anything that should be in memory prior to handling events.
 
     async def on_ready(self) -> None:
+        self.logger.info(f"================================================================================")
         self.logger.info(f"Logged in as {self.user} (ID: {self.user.id})")
+        self.logger.info(f"Invite URL: {discord.utils.oauth_url(self.user.id)}")
+        self.logger.info(f"Connected to {len(self.guilds)} guilds")
+        self.logger.info(f"Loaded {len(self.extensions)} extensions")
+        self.logger.info(f"================================================================================")
         
-
 async def main():
     
     
@@ -76,12 +86,16 @@ async def main():
     # bot setup
     intents = discord.Intents.default()
     intents.members = True
-    #intents.message_content = True
+    intents.message_content = True
     
     
     #async with CommunityBot(initial_extensions=settings._bot_modules, command_prefix=settings._bot_prefix, intents=intents) as bot:
     #    await bot.start(token = settings._bot_token)
     
     
-    bot = CommunityBot(initial_extensions=settings._bot_modules, command_prefix=settings._bot_prefix, intents=intents, logger=bot_logger)
+    bot = CommunityBot(initial_extensions=settings._bot_modules,
+                       command_prefix=settings._bot_prefix,
+                       intents=intents,
+                       logger=bot_logger,
+                       application_id = settings._bot_application_id,)
     await bot.start(settings._bot_token)

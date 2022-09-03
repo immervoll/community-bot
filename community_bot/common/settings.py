@@ -15,10 +15,13 @@ class Settings():
     _bot_api : API
     _bot_language : str
     _bot_modules : list
+    _bot_application_id: int
     
     def __init__(self):
         self._bot_version = "0.0.1 - dev"
         self._bot_author = "Immervoll"
+        self._bot_application_id = 1014977037489942528
+        
         if is_docker():
             self._bot_name = os.getenv('BOT_NAME', 'CommunityBot')
             self._bot_prefix = os.getenv('BOT_PREFIX', '!')
