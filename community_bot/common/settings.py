@@ -19,7 +19,7 @@ class Settings():
     def __init__(self):
         self._bot_version = "0.0.1 - dev"
         self._bot_author = "Immervoll"
-        if is_docker:
+        if is_docker():
             self._bot_name = os.getenv('BOT_NAME', 'CommunityBot')
             self._bot_prefix = os.getenv('BOT_PREFIX', '!')
             self._bot_token = os.getenv('BOT_TOKEN', '')
@@ -29,18 +29,18 @@ class Settings():
             self._bot_language = os.getenv('BOT_LANGUAGE', 'en')
             self._bot_modules = os.getenv('BOT_MODULES', 'general,').split(',')
             
-        elif os.isfile('settings.yml'):
+        elif os.path.exists('settings.yml'):
             import yaml
             with open('settings.yml', 'r') as f:
                 settings = yaml.safe_load(f)
-                self._bot_name = settings['name']
-                self._bot_prefix = settings['prefix']
-                self._bot_token = settings['token']
-                self._bot_log_level = settings['log']['level']
-                self._bot_log_file = settings['log']['file']
-                self._bot_api = API(settings['api']['host'], settings['api']['token'])
-                self._bot_language = settings['language']
-                self._bot_modules = settings['modules']
+                self._bot_name = settings['NAME']
+                self._bot_prefix = settings['PREFIX']
+                self._bot_token = settings['TOKEN']
+                self._bot_log_level = settings['LOG']['LEVEL']
+                self._bot_log_file = settings['LOG']['FILE']
+                self._bot_api = API(settings['API']['HOST'], settings['API']['TOKEN'])
+                self._bot_language = settings['LANGUAGE']
+                self._bot_modules = settings['MODULES']
         
         else:
             raise FileNotFoundError('settings.yml not found')
