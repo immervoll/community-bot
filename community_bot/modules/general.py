@@ -2,6 +2,7 @@ import typing
 import discord
 from discord.ext import commands
 from discord import app_commands
+from community_bot.common.responses import Notification
 
 class GeneralCog(commands.Cog):
     def __init__(self, bot):
@@ -12,7 +13,7 @@ class GeneralCog(commands.Cog):
     async def on_member_join(self, member):
         channel = member.guild.system_channel
         if channel is not None:
-            await channel.send(f'Welcome {member.mention}.')
+            await channel.send(embed = Notification(custom_icon= "👋", custom_color=0xFFFFFFF, title = f"{member.name} joined", content=f'Welcome {member.mention} to the server 🥳.' ))
 
     @commands.hybrid_command()
     async def hello(self, ctx, *, member: discord.Member = None):
@@ -55,9 +56,7 @@ class GeneralCog(commands.Cog):
                     synced = []
                 else:
                     synced = await ctx.bot.tree.sync()
-                await ctx.send(
-                    f"🔁 Synced {len(synced)} commands {'globally' if spec is None else 'to the current guild.'}", delete_after=5
-                )
+                await ctx.send(embed=Notification(custom_icon="🔁", custom_color=0x00FF00, title="Synced AppCommands", content=f"Synced {len(synced)} commands"), delete_after=5)
                 return
             ret = 0
             for guild in guilds:
@@ -70,9 +69,7 @@ class GeneralCog(commands.Cog):
             await ctx.send(f"Synced the tree to {ret}/{len(guilds)}.")
         except discord.HTTPException as e:
             if e.status == 429:
-                await ctx.send(
-                    f"⚠️ Ratelimited. Try again in {e.retry_after:.2f} seconds.", delete_after=5
-                )
+                await ctx.send(embed=Notification(type=2, title="Rate Limited", content="You are being rate limited. Try again later."), delete_after=5)
     
         
 async def setup(bot):
