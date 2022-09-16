@@ -9,7 +9,7 @@ class Notification(discord.Embed):
         "affirmative" : { "color" : 0x00FF80, "icon" : "✅" },
     }
     
-    def __init__(self, *, type: Optional[str] = "log", title: Optional[str] = None, content: Optional[str] = None, **kwargs):
+    def __init__(self, type: Optional[str] = "log", title: Optional[str] = None, content: Optional[str] = None, **kwargs):
         """Notification embeds for the bot
         Types:
             0: log 📝 (default)
