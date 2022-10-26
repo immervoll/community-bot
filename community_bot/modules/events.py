@@ -3,7 +3,7 @@ import typing
 import discord
 from discord.ext import commands
 from discord import app_commands
-from community_bot.common.responses import Notification
+from community_bot.common.responses import Notification, ListEmbed
 
 class EventsCog(commands.Cog):
     events : dict
@@ -11,7 +11,7 @@ class EventsCog(commands.Cog):
         self.bot = bot
         self.events = {}
         super().__init__()
-        
+         
 
     events = app_commands.Group(name="event", description="...")
     
@@ -27,8 +27,23 @@ class EventsCog(commands.Cog):
             channel = interaction.channel
         else:
             channel = channel.resolve()
+        
+        class Selects(discord.ui.View):
+            def __init__(self):
+                super().__init__()
+                
+            @discord.ui.select(placeholder="select Slot from Group 1", options=[discord.SelectOption(label="Slot 1", value="1"), discord.SelectOption(label="Slot 2", value="2"), discord.SelectOption(label="Slot 3", value="3")])
+            async def select1(self, select: discord.ui.Select, interaction: discord.Interaction):
+                await interaction.response.send_message(embed=Notification(4, title="Slot Selected", content="{select.values[0]} was selected"))
+            @discord.ui.select(placeholder="select Slot from Group 2", options=[discord.SelectOption(label="Slot 1", value="1"), discord.SelectOption(label="Slot 2", value="2"), discord.SelectOption(label="Slot 3", value="3")])
+            async def select2(self, select: discord.ui.Select, interaction: discord.Interaction):
+                await interaction.response.send_message(embed=Notification(4, title="Slot Selected", content="{select.values[0]} was selected"))
             
-        message = await channel.send(embed = Notification(0, "Event", "This is a dummy event"))
+            
+        _ipsum = "Donec feugiat dui nunc, eu pretium neque facilisis posuere. Vivamus sit amet auctor diam. Nulla facilisi. Nulla et tristique ipsum. Nunc mollis lorem ligula, non bibendum est vulputate eu. Vestibulum sit amet sodales nisl. Donec ut rutrum nunc. In et leo erat. Curabitur quis tellus nibh."
+        message = await channel.send(embed = ListEmbed(title = "Test Event", description = _ipsum, items = [("Slot Group 1", "**Slot 1** - empty\n**Slot 2** - empty\n**Slot 3** - empty"), ("Slot Group 1", "**Slot 1** - empty\n**Slot 2** - empty\n**Slot 3** - empty")]), view = Selects())
+       
+        #message = await channel.send(embed = Notification(0, "Event", "This is a dummy event"))
         self.events.update({event_id : message.id})
           
         await interaction.response.send_message(embed=Notification(type=4, title="Event posted", content=f"Successfully posted {event_id}"), ephemeral=True)
