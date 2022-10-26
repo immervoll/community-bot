@@ -41,3 +41,33 @@ class Notification(discord.Embed):
             assert kwargs.get("custom_icon") and kwargs.get("custom_color"), "Custom icon and color must both be provided"
             self.color = kwargs.get("custom_color")
             self.add_field(name=f"""{kwargs.get("custom_icon")} {title}""", value=content, inline=False)
+class ListEmbed(discord.Embed):
+    EMOJIS = {
+        0 : "0️⃣",
+        1 : "1️⃣",
+        2 : "2️⃣",
+        3 : "3️⃣",
+        4 : "4️⃣",
+        5 : "5️⃣",
+        6 : "6️⃣",
+        7 : "7️⃣",
+        8 : "8️⃣",
+        9 : "9️⃣",
+        10 : "🔟",
+    }
+    
+    def __init__(self, title: str, description: str, items: list, **kwargs):
+        """Embed for listing items
+        Args:
+            title (str): Embed title
+            description (str): Embed description
+            items (list): List of items to list (max 11), format : [(field_name, field_value), ...]
+        """
+        assert len(items) <= len(self.EMOJIS), "Too many items to list"
+        super().__init__(**kwargs)
+        self.title = title
+        self.description = description
+        self.color = 0xFFFFFF
+        for i, item in enumerate(items):
+            self.add_field(name=f"{self.EMOJIS[i]} {item[0]}", value=item[1], inline=True)
+            
